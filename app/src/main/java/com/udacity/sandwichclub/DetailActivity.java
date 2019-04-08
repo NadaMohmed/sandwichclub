@@ -4,23 +4,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import org.json.JSONException;
+import org.w3c.dom.Text;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+
+    public Sandwich sandwich = null;
+    public  TextView origin ;
+    public  TextView also_known_as ;
+    public  TextView ingredients ;
+    public  TextView description ;
+    public ImageView ingredientsIv ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
+         ingredientsIv = findViewById(R.id.image_iv);
+         origin = (TextView)findViewById(R.id.origin_tv) ;
+           also_known_as =(TextView)findViewById(R.id.also_known_tv) ;
+          ingredients =(TextView) findViewById(R.id.ingredients_tv) ;
+         description = (TextView)findViewById(R.id.description_tv) ;
+
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -36,7 +52,12 @@ public class DetailActivity extends AppCompatActivity {
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
         String json = sandwiches[position];
-        Sandwich sandwich = JsonUtils.parseSandwichJson(json);
+
+        try {
+            sandwich = JsonUtils.parseSandwichJson(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
@@ -44,6 +65,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         populateUI();
+        // library betdeha el url w ygeblek el image
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -57,6 +79,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI() {
+       origin.setText(sandwich.getPlaceOfOrigin().toString());
+       also_known_as.setText(sandwich.getAlsoKnownAs().toString());
+       ingredients.setText(sandwich.getIngredients().toString());
+       description.setText(sandwich.getDescription().toString());
 
     }
 }
