@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 public class DetailActivity extends AppCompatActivity {
-
+///////////
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
